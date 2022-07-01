@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
+import { UserContext } from '../../contexts/user.context';
 import {
   signInWithGooglePopup,
   createUserDocumentFromAuth,
@@ -9,12 +10,11 @@ import FormInput from '../form-input/form-input.component';
 import './sign-in-form.styles.scss';
 
 const SignInForm = () => {
-  // input states
-  const [formFields, setFormFields] = useState({
-    email: '',
-    password: '',
-  });
-  const { email, password } = formFields;
+  const [formFields, setFormFields] = useState({ email: '', password: '' });
+  const { email, password } = formFields; // destructure
+
+  // Context
+  const { setCurrentUser } = useContext(UserContext);
 
   // INPUT CHANGE HANDLER
   const handleChange = (e) => {
@@ -34,7 +34,7 @@ const SignInForm = () => {
 
     try {
       const response = await signInAuthUserWithEmailAndPassword(email, password);
-      console.log(response);
+      setCurrentUser(response.user); // Context
       // clear form fields
       setFormFields({ displayName: '', email: '', password: '', confirmPassword: '' });
     } catch (error) {
