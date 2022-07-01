@@ -1,5 +1,4 @@
-import { useContext, useState } from 'react';
-import { UserContext } from '../../contexts/user.context';
+import { useState } from 'react';
 import {
   createAuthUserWithEmailAndPassword,
   createUserDocumentFromAuth,
@@ -18,7 +17,6 @@ const SignUpForm = () => {
   });
   const { displayName, email, password, confirmPassword } = formFields;
   // Context
-  const { setCurrentUser } = useContext(UserContext);
 
   // FORM SUBMIT HANDLER
   const handleSubmit = async (e) => {
@@ -31,7 +29,6 @@ const SignUpForm = () => {
 
     try {
       const response = await createAuthUserWithEmailAndPassword(email, password);
-      setCurrentUser(response.user); // Context
 
       // storing user in database after saving in Auth
       await createUserDocumentFromAuth(response.user, { displayName });
