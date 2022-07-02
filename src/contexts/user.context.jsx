@@ -17,12 +17,14 @@ export const UserProvider = ({ children }) => {
 
   // Fires when sign-in / sign-out
   useEffect(() => {
-    onAuthStateChangedListener((user) => {
+    const unsubscribe = onAuthStateChangedListener((user) => {
       if (user) {
         createUserDocumentFromAuth(user);
       }
       setCurrentUser(user);
     });
+
+    return unsubscribe;
   }, []);
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
