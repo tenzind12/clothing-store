@@ -9,7 +9,7 @@ import {
   signOut,
   onAuthStateChanged,
 } from 'firebase/auth';
-import { getFirestore, doc, getDoc, setDoc } from 'firebase/firestore';
+import { getFirestore, doc, getDoc, setDoc, collection, writeBatch } from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyAcWqdyFozOX_KGUapH5LN3J7vDnauR810',
@@ -36,6 +36,20 @@ export const signInWithGoogleRedirect = () => signInWithRedirect(auth, provider)
 
 // ============  FIRE STORE ============== //
 export const db = getFirestore();
+
+// STORE PRODUCTS COLLECTION IN FIRESTORE (DATABASE)
+export const addCollectionAndDocuments = async (collectionKey, objectsToAdd) => {
+  const collectionRef = collection(db, collectionKey);
+  const batch = writeBatch(db);
+
+  objectsToAdd.forEach((object) => {
+    const docRef = doc(collectionRef, object.title.toLowerCase());
+    batch.set(docRef, object);
+  });
+
+  await batch.commit();
+  console.log('done');
+};
 
 // STORE USER INFO IN FIRESTORE (DATABASE)
 export const createUserDocumentFromAuth = async (userAuth, additionalInformation = {}) => {

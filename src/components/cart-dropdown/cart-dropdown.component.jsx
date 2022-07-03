@@ -23,7 +23,7 @@ const CartDropdown = () => {
         ))}
       </div>
 
-      {cartItems.length && <Button onClick={goToCheckoutHandler}>GO TO CHECKOUT</Button>}
+      {cartItems.length ? <Button onClick={goToCheckoutHandler}>GO TO CHECKOUT</Button> : ''}
     </div>
   );
 };
