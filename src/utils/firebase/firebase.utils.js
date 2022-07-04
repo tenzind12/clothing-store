@@ -9,7 +9,16 @@ import {
   signOut,
   onAuthStateChanged,
 } from 'firebase/auth';
-import { getFirestore, doc, getDoc, setDoc, collection, writeBatch } from 'firebase/firestore';
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  setDoc,
+  collection,
+  writeBatch,
+  query,
+  getDocs,
+} from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyAcWqdyFozOX_KGUapH5LN3J7vDnauR810',
@@ -37,7 +46,7 @@ export const signInWithGoogleRedirect = () => signInWithRedirect(auth, provider)
 // ============  FIRE STORE ============== //
 export const db = getFirestore();
 
-// STORE PRODUCTS COLLECTION IN FIRESTORE (DATABASE)
+// ===== STORE PRODUCTS COLLECTION IN FIRESTORE (DATABASE) ===== //
 export const addCollectionAndDocuments = async (collectionKey, objectsToAdd) => {
   const collectionRef = collection(db, collectionKey);
   const batch = writeBatch(db);
@@ -49,6 +58,21 @@ export const addCollectionAndDocuments = async (collectionKey, objectsToAdd) => 
 
   await batch.commit();
   console.log('done');
+};
+
+// ===== GETTING PRODUCTS FROM FIRESTORE TO FRONTEND ===== //
+export const getCategoriesAndDocuments = async () => {
+  const collectionRef = collection(db, 'categories');
+  const q = query(collectionRef);
+
+  const querySnapshot = await getDocs(q);
+  const categoryMap = querySnapshot.docs.reduce((acc, currDocSnapshot) => {
+    const { title, items } = currDocSnapshot.data();
+    acc[title.toLowerCase()] = items;
+    return acc;
+  }, {});
+
+  return categoryMap;
 };
 
 // STORE USER INFO IN FIRESTORE (DATABASE)
