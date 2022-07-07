@@ -6,6 +6,7 @@ export const CategoriesContext = createContext({
 });
 
 export const CategoriesProvider = ({ children }) => {
+  // array of all all category arrays
   const [categoriesMap, setCategoriesMap] = useState({});
   const value = { categoriesMap };
 
