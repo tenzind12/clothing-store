@@ -13,6 +13,11 @@ const Category = () => {
     setProducts(categoriesMap[category]);
   }, [categoriesMap, category]);
 
+  // to scroll page to top
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <>
       <h2 className="category-title">{category.toUpperCase()}</h2>
